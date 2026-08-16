@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Task Management</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="dashboard-wrapper">
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="navbar-content">
+        <h1 class="navbar-title">📋 Task Manager</h1>
+        <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+      </div>
+    </nav>
+    <button id="themeToggle" class="btn btn-secondary">
+  ☀️ Light
+</button>
+
+
+
+    <div class="container">
+      <!-- Welcome Section -->
+      <div class="welcome-card">
+        <h2 id="welcomeMsg">Welcome!</h2>
+        <p>Stay organized and manage your tasks efficiently</p>
+      </div>
+      
+
+      <!-- Stats Section -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📊</div>
+          <div class="stat-content">
+            <p class="stat-label">Total Tasks</p>
+            <p class="stat-value" id="totalTasks">0</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-content">
+            <p class="stat-label">Pending</p>
+            <p class="stat-value" id="pendingTasks">0</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">🔄</div>
+          <div class="stat-content">
+            <p class="stat-label">In Progress</p>
+            <p class="stat-value" id="inProgressTasks">0</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-content">
+            <p class="stat-label">Completed</p>
+            <p class="stat-value" id="completedTasks">0</p>
+          </div>
+        </div>
+      </div>
+      <!-- Analytics Section -->
+<section class="analytics-section">
+
+  <div class="analytics-header">
+    <div>
+      <p class="analytics-label">📊 ANALYTICS</p>
+      <h2>Task Overview</h2>
+      <p class="analytics-subtitle">
+        Track your productivity and task distribution
+      </p>
+    </div>
+  </div>
+
+  <div class="analytics-grid">
+
+    <!-- Completion -->
+    <div class="analytics-card">
+      <div class="analytics-card-top">
+        <span>Completion Rate</span>
+        <span id="analyticsCompletion">0%</span>
+      </div>
+
+      <div class="analytics-progress">
+        <div id="analyticsProgress"></div>
+      </div>
+
+      <p id="analyticsCompletionText">
+        0 of 0 tasks completed
+      </p>
+    </div>
+
+    <!-- Task Distribution -->
+    <div class="analytics-card">
+      <h3>Task Distribution</h3>
+
+      <div class="distribution-row">
+        <span>⏳ Pending</span>
+        <strong id="analyticsPending">0</strong>
+      </div>
+
+      <div class="distribution-row">
+        <span>🔄 In Progress</span>
+        <strong id="analyticsProgressCount">0</strong>
+      </div>
+
+      <div class="distribution-row">
+        <span>✅ Completed</span>
+        <strong id="analyticsCompleted">0</strong>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+      
+      <!-- Productivity Overview -->
+<div class="productivity-card">
+
+  <div class="productivity-header">
+    <div>
+      <p class="productivity-label">PRODUCTIVITY</p>
+      <h3>Task Completion</h3>
+    </div>
+
+    <div class="completion-circle">
+      <span id="completionPercent">0%</span>
+    </div>
+  </div>
+
+  <div class="progress-track">
+    <div id="completionProgress" class="progress-fill"></div>
+  </div>
+
+  <div class="productivity-footer">
+    <span id="productivityMessage">
+      Let's get started 🚀
+    </span>
+
+    <span id="completionSummary">
+      0 of 0 completed
+    </span>
+  </div>
+
+</div>
+
+      <!-- Add Task Section -->
+      <div class="add-task-section">
+        <h2>Add New Task</h2>
+        <form id="addTaskForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="taskTitle">Task Title *</label>
+              <input type="text" id="taskTitle" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="taskDescription">Description</label>
+              <textarea id="taskDescription" rows="3"></textarea>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="taskPriority">Priority</label>
+              <select id="taskPriority">
+                <option value="Low">Low</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="High">High</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="taskDueDate">Due Date</label>
+              <input type="date" id="taskDueDate">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Add Task</button>
+        </form>
+      </div>
+
+      <!-- Filter and Search Section -->
+<div class="filter-section">
+
+  <div class="filter-buttons">
+
+    <button class="filter-btn active" data-filter="All">
+      All
+    </button>
+
+    <button class="filter-btn" data-filter="Pending">
+      ⏳ Pending
+    </button>
+
+    <button class="filter-btn" data-filter="In Progress">
+      🔄 In Progress
+    </button>
+
+    <button class="filter-btn" data-filter="Completed">
+      ✅ Completed
+    </button>
+
+  </div>
+
+  <div class="search-box">
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="🔍 Search tasks..."
+    >
+  </div>
+
+</div>
+<div class="priority-filter">
+
+  <label for="priorityFilter">Priority:</label>
+
+  <select id="priorityFilter">
+    <option value="All">All Priorities</option>
+    <option value="High">🔴 High</option>
+    <option value="Medium">🟡 Medium</option>
+    <option value="Low">🟢 Low</option>
+  </select>
+
+  <button id="clearFiltersBtn" class="btn btn-secondary">
+    Clear Filters
+  </button>
+
+</div>
+
+      <!-- Tasks Section -->
+      <div class="tasks-section">
+        <h2>Your Tasks</h2>
+        <div id="tasksList" class="tasks-grid">
+          <p class="no-tasks">No tasks found. Create one to get started!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

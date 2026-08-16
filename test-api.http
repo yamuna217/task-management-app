@@ -1,0 +1,22 @@
+### Login
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "yamuna.test@gmail.com",
+  "password": "123456"
+}
+
+###
+
+### Create Task
+POST http://localhost:5000/api/tasks
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+
+{
+  "title": "Complete Internship Task 2",
+  "description": "Build the task management application",
+  "priority": "high",
+  "status": "pending"
+}
