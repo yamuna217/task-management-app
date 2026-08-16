@@ -9,7 +9,9 @@
   padding: 0;
   box-sizing: border-box;
 }
-
+.hidden {
+  display: none !important;
+}
 :root {
   --bg: #080b18;
   --card: rgba(18, 24, 45, 0.82);
