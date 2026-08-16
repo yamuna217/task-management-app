@@ -1,6 +1,5 @@
 // API base URL
-const API_BASE_URL = 'http://localhost:5000/api';
-
+const API_BASE_URL = 'https://task-management-app-5px4.onrender.com/api';
 // Display message function
 function showMessage(message, type = 'success') {
   const messageDiv = document.getElementById('message');
