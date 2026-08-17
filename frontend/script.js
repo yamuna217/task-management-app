@@ -15,6 +15,7 @@ const taskFormTitle = document.getElementById('taskFormTitle');
 const taskSubmitBtn = document.getElementById('taskSubmitBtn');
 
 let editingTaskId = null;
+let currentTasks = [];
 
 function setMessage(element, type, text) {
   if (!element) return;
@@ -212,7 +213,82 @@ async function fetchTasks() {
   }
 }
 
+// ================================
+// DASHBOARD STATISTICS
+// ================================
+
+function updateDashboardStats(tasks) {
+  const total = tasks.length;
+
+  const pending = tasks.filter(
+    (task) => task.status === 'pending'
+  ).length;
+
+  const inProgress = tasks.filter(
+    (task) => task.status === 'in-progress'
+  ).length;
+
+  const completed = tasks.filter(
+    (task) => task.status === 'completed'
+  ).length;
+
+  const completionRate =
+    total === 0 ? 0 : Math.round((completed / total) * 100);
+
+  const setText = (id, value) => {
+    const element = document.getElementById(id);
+    if (element) element.textContent = value;
+  };
+
+  setText('totalTasks', total);
+  setText('pendingTasks', pending);
+  setText('inProgressTasks', inProgress);
+  setText('completedTasks', completed);
+
+  setText('overviewTotal', total);
+  setText('overviewPending', pending);
+  setText('overviewProgress', inProgress);
+  setText('overviewCompleted', completed);
+
+  setText('completionRate', `${completionRate}%`);
+  setText('productivityPercent', `${completionRate}%`);
+    const pendingPercent =
+    total === 0 ? 0 : Math.round((pending / total) * 100);
+
+  const progressPercent =
+    total === 0 ? 0 : Math.round((inProgress / total) * 100);
+
+  const completedPercent =
+    total === 0 ? 0 : Math.round((completed / total) * 100);
+
+  setText('pendingPercent', `${pendingPercent}%`);
+  setText('progressPercent', `${progressPercent}%`);
+  setText('completedPercent', `${completedPercent}%`);
+
+  const pendingBar = document.getElementById('pendingBar');
+  const progressBar = document.getElementById('progressBar');
+  const completedBar = document.getElementById('completedBar');
+  const productivityBar = document.getElementById('productivityBar');
+
+  if (pendingBar) {
+    pendingBar.style.width = `${pendingPercent}%`;
+  }
+
+  if (progressBar) {
+    progressBar.style.width = `${progressPercent}%`;
+  }
+
+  if (completedBar) {
+    completedBar.style.width = `${completedPercent}%`;
+  }
+
+  if (productivityBar) {
+    productivityBar.style.width = `${completionRate}%`;
+  }
+}
 function renderTasks(tasks) {
+  updateDashboardStats(tasks);
+    currentTasks = tasks;
   taskList.innerHTML = '';
 
   if (!tasks.length) {
@@ -443,3 +519,144 @@ if (savedToken && savedUser) {
 } else {
   showAuthView('login');
 }
+// ================================
+// THEME TOGGLE
+// ================================
+
+const themeToggle = document.getElementById('themeToggle');
+
+function applySavedTheme() {
+  const savedTheme = localStorage.getItem('theme');
+
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-mode');
+    themeToggle.textContent = '☀️';
+  } else {
+    document.body.classList.remove('light-mode');
+    themeToggle.textContent = '🌙';
+  }
+}
+
+themeToggle?.addEventListener('click', () => {
+  const isLight = document.body.classList.toggle('light-mode');
+
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  themeToggle.textContent = isLight ? '☀️' : '🌙';
+});
+
+applySavedTheme();
+// ================================
+// COLLAPSE BUTTON
+// ================================
+
+const collapseBtn = document.getElementById('collapseBtn');
+const dashboardViewElement = document.getElementById('dashboardView');
+
+collapseBtn?.addEventListener('click', () => {
+  dashboardViewElement.classList.toggle('collapsed');
+
+  collapseBtn.textContent =
+    dashboardViewElement.classList.contains('collapsed') ? '☰' : '☰';
+});
+// ================================
+// TASK SEARCH + FILTERS
+// ================================
+
+const taskSearch = document.getElementById('taskSearch');
+const statusFilter = document.getElementById('statusFilter');
+const priorityFilter = document.getElementById('priorityFilter');
+
+function applyTaskFilters() {
+  const searchTerm = (taskSearch?.value || '').trim().toLowerCase();
+  const selectedStatus = statusFilter?.value || 'all';
+  const selectedPriority = priorityFilter?.value || 'all';
+
+  const filteredTasks = currentTasks.filter((task) => {
+    const title = String(task.title || '').toLowerCase();
+    const description = String(task.description || '').toLowerCase();
+
+    const matchesSearch =
+      !searchTerm ||
+      title.includes(searchTerm) ||
+      description.includes(searchTerm);
+
+    const matchesStatus =
+      selectedStatus === 'all' ||
+      task.status === selectedStatus;
+
+    const matchesPriority =
+      selectedPriority === 'all' ||
+      task.priority === selectedPriority;
+
+    return matchesSearch && matchesStatus && matchesPriority;
+  });
+
+  renderFilteredTasks(filteredTasks);
+}
+
+function renderFilteredTasks(tasks) {
+  taskList.innerHTML = '';
+
+  if (!tasks.length) {
+    taskList.innerHTML =
+      '<div class="task-empty">No matching tasks found.</div>';
+    return;
+  }
+
+  tasks.forEach((task) => {
+    const card = document.createElement('div');
+    card.className = 'task-card';
+
+    const statusClass = `pill-${task.status || 'pending'}`;
+    const priorityClass = `pill-${task.priority || 'medium'}`;
+
+    card.innerHTML = `
+      <div class="task-card-header">
+        <h4>${escapeHtml(task.title || 'Untitled Task')}</h4>
+      </div>
+
+      <div class="task-meta">
+        <span class="task-pill ${statusClass}">
+          ${task.status || 'pending'}
+        </span>
+
+        <span class="task-pill ${priorityClass}">
+          ${task.priority || 'medium'}
+        </span>
+      </div>
+
+      <p>${escapeHtml(task.description || 'No description available.')}</p>
+
+      <p>
+        <strong>Due date:</strong>
+        ${task.dueDate ? formatDate(task.dueDate) : 'No due date'}
+      </p>
+
+      <div class="task-actions">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-action="edit"
+          data-id="${task._id}"
+        >
+          Edit
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-action="delete"
+          data-id="${task._id}"
+        >
+          Delete
+        </button>
+      </div>
+    `;
+
+    taskList.appendChild(card);
+  });
+}
+
+taskSearch?.addEventListener('input', applyTaskFilters);
+statusFilter?.addEventListener('change', applyTaskFilters);
+priorityFilter?.addEventListener('change', applyTaskFilters);
