@@ -1,5 +1,4 @@
-const API_URL = 'http://localhost:5000/api';
-
+const API_URL = 'https://task-management-backend-vpv8.onrender.com/api';
 const loginView = document.getElementById('loginView');
 const registerView = document.getElementById('registerView');
 const dashboardView = document.getElementById('dashboardView');
