@@ -91,7 +91,7 @@ async function loginUser(event) {
 
     // Redirect to dashboard after 1.5 seconds
     setTimeout(() => {
-      window.location.href = 'dashboard.html';
+      window.location.href = '/dashboard.html';
     }, 1500);
   } catch (error) {
     console.error('Error:', error);
